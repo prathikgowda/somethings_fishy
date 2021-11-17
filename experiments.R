@@ -49,3 +49,51 @@ effort_df <- effort_df %>%
 # Use a join to combine the effort table and vessel table by MMSI
 combined_df <- inner_join(effort_df, vessel_df, by=c("mmsi"))
 
+
+##### MAP STUFF #####
+
+# World polygons from the maps package
+world_shp <- sf::st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
+
+# # Load EEZ polygons
+# eezs <- read_sf('~/data/shapefiles/World_EEZ_v10_20180221/', layer = 'eez_v10') %>% 
+#   filter(Pol_type == '200NM') # select the 200 nautical mile polygon layer
+
+# Aggregate data across all fleets and geartypes
+effort_all <- combined_df %>% 
+  group_by(cell_ll_lat,cell_ll_lon) %>% 
+  summarize(fishing_hours = sum(fishing_hours, na.rm = T),
+            log_fishing_hours = log10(sum(fishing_hours, na.rm = T))) %>% 
+  ungroup() %>% 
+  mutate(log_fishing_hours = ifelse(log_fishing_hours <= 1, 1, log_fishing_hours),
+         log_fishing_hours = ifelse(log_fishing_hours >= 5, 5, log_fishing_hours)) %>% 
+  filter(fishing_hours >= 24)
+
+
+
+# Linear green color palette function
+effort_pal <- colorRampPalette(c('#0C276C', '#3B9088', '#EEFF00', '#ffffff'), 
+                               interpolate = 'linear')
+
+# Map fishing effort
+p1 <- effort_all %>%
+  ggplot() +
+  geom_sf(data = world_shp, 
+          fill = '#374a6d', 
+          color = '#0A1738',
+          size = 0.1) +
+  geom_raster(aes(x = cell_ll_lon, y = cell_ll_lat, fill = log_fishing_hours)) +
+  scale_fill_gradientn(
+    "Fishing Hours",
+    na.value = NA,
+    limits = c(1, 5),
+    colours = effort_pal(5), # Linear Green
+    labels = c("10", "100", "1,000", "10,000", "100,000+"),
+    values = scales::rescale(c(0, 1))) +
+  labs(fill  = 'Fishing hours (log scale)',
+       title = 'Global fishing effort in 2016') +
+  guides(fill = guide_colourbar(barwidth = 10))
+
+
+
+
