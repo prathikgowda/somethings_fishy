@@ -82,7 +82,7 @@ p1 <- effort_all %>%
           fill = '#374a6d', 
           color = '#0A1738',
           size = 0.1) +
-  geom_raster(aes(x = cell_ll_lon, y = cell_ll_lat, fill = log_fishing_hours)) +
+  geom_raster(aes(x = cell_ll_lon*100, y = cell_ll_lat*100, fill = log_fishing_hours)) +
   scale_fill_gradientn(
     "Fishing Hours",
     na.value = NA,
@@ -93,6 +93,8 @@ p1 <- effort_all %>%
   labs(fill  = 'Fishing hours (log scale)',
        title = 'Global fishing effort in 2016') +
   guides(fill = guide_colourbar(barwidth = 10))
+
+
 
 
 
