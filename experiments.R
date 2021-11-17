@@ -9,8 +9,8 @@ library(maptools)
 library(rgeos)
 
 # Specify location of data directory
-effort_data_dir <- 'dataset/mmsi-daily-csvs-10-v2-2020'
-vessel_data_file <- 'dataset/vessel/fishing-vessels-v1-5.csv'
+effort_data_dir <- '~/somethings_fishy/dataset/mmsi-daily-csvs-10-v2-2020'
+vessel_data_file <- '~/somethings_fishy/dataset/vessel/fishing-vessels-v1-5.csv'
 
 # Create dataframe of filenames dates and filter to date range of interest
 effort_files <- tibble(
@@ -22,7 +22,7 @@ effort_files <- tibble(
 effort_dates <- seq(ymd('2020-01-01'), ymd('2020-12-31'), by='days')
 
 # Read in data (uncomment to read in parallel)
-plan(multiprocess) # Windows users should change this to plan(multisession)
+plan(multisession) # Windows users should change this to plan(multisession)
 effort_df <- furrr::future_map_dfr(effort_files$file, .f = read_csv)
 
 vessel_df <- read.csv(file = vessel_data_file)
