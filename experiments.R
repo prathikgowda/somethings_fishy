@@ -9,7 +9,8 @@ library(maptools)
 library(rgeos)
 
 # Specify location of data directory
-effort_data_dir <- '~/somethings_fishy/dataset/mmsi-daily-csvs-10-v2-2020'
+# effort_data_dir <- '~/somethings_fishy/dataset/mmsi-daily-csvs-10-v2-2020'
+effort_data_dir <- '~/somethings_fishy/dataset/test-effort-data'
 vessel_data_file <- '~/somethings_fishy/dataset/vessel/fishing-vessels-v1-5.csv'
 
 # Create dataframe of filenames dates and filter to date range of interest
@@ -31,20 +32,6 @@ vessel_df <- read.csv(file = vessel_data_file)
 effort_df <- effort_df %>% 
   mutate(year  = year(date),
          month = month(date))
-
-# Specify new (lower) resolution in degrees for aggregating data
-res <- 0.25
-
-# Transform data across all fleets and geartypes
-effort_df <- effort_df %>% 
-  mutate(
-    # convert from hundreths of a degree to degrees
-    cell_ll_lat = cell_ll_lat / 100, 
-    cell_ll_lon = cell_ll_lon / 100,
-    # calculate new lat lon bins with desired resolution
-    cell_ll_lat = floor(cell_ll_lat/res) * res + 0.5 * res, 
-    cell_ll_lon = floor(cell_ll_lon/res) * res + 0.5 * res)
-
 
 # Use a join to combine the effort table and vessel table by MMSI
 combined_df <- inner_join(effort_df, vessel_df, by=c("mmsi"))
@@ -79,10 +66,9 @@ effort_pal <- colorRampPalette(c('#0C276C', '#3B9088', '#EEFF00', '#ffffff'),
 p1 <- effort_all %>%
   ggplot() +
   geom_sf(data = world_shp, 
-          fill = '#374a6d', 
-          color = '#0A1738',
+          color = '#374a6d',
           size = 0.1) +
-  geom_raster(aes(x = cell_ll_lon*100, y = cell_ll_lat*100, fill = log_fishing_hours)) +
+  geom_raster(aes(x = cell_ll_lon, y = cell_ll_lat, fill = log_fishing_hours)) +
   scale_fill_gradientn(
     "Fishing Hours",
     na.value = NA,
@@ -91,7 +77,7 @@ p1 <- effort_all %>%
     labels = c("10", "100", "1,000", "10,000", "100,000+"),
     values = scales::rescale(c(0, 1))) +
   labs(fill  = 'Fishing hours (log scale)',
-       title = 'Global fishing effort in 2016') +
+       title = 'Global fishing effort in 2020') +
   guides(fill = guide_colourbar(barwidth = 10))
 
 
