@@ -8,6 +8,8 @@ library(maps) # additional helpful mapping packages
 library(maptools)
 library(rgeos)
 
+test <- "hello"
+
 # Specify location of data directory
 # effort_data_dir <- '~/somethings_fishy/dataset/mmsi-daily-csvs-10-v2-2020'
 effort_data_dir <- '~/somethings_fishy/dataset/test-effort-data'
@@ -48,13 +50,15 @@ world_shp <- sf::st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
 
 # Aggregate data across all fleets and geartypes
 effort_all <- combined_df %>% 
-  group_by(cell_ll_lat,cell_ll_lon) %>% 
-  summarize(fishing_hours = sum(fishing_hours, na.rm = T),
-            log_fishing_hours = log10(sum(fishing_hours, na.rm = T))) %>% 
-  ungroup() %>% 
-  mutate(log_fishing_hours = ifelse(log_fishing_hours <= 1, 1, log_fishing_hours),
-         log_fishing_hours = ifelse(log_fishing_hours >= 5, 5, log_fishing_hours)) %>% 
-  filter(fishing_hours >= 24)
+  filter(flag %in% c('CHN')) %>% 
+  group_by(cell_ll_lat,cell_ll_lon, flag) %>% 
+  summarize(fishing_hours = sum(fishing_hours, na.rm = T))
+# ,
+#             log_fishing_hours = log10(sum(fishing_hours, na.rm = T))) %>% 
+#   ungroup() %>% 
+#   mutate(log_fishing_hours = ifelse(log_fishing_hours <= 1, 1, log_fishing_hours),
+#          log_fishing_hours = ifelse(log_fishing_hours >= 5, 5, log_fishing_hours)) %>% 
+  # filter(fishing_hours >= 24)
 
 
 
@@ -68,7 +72,7 @@ p1 <- effort_all %>%
   geom_sf(data = world_shp, 
           color = '#374a6d',
           size = 0.1) +
-  geom_raster(aes(x = cell_ll_lon, y = cell_ll_lat, fill = log_fishing_hours)) +
+  geom_raster(aes(x = cell_ll_lon, y = cell_ll_lat, fill = fishing_hours)) +
   scale_fill_gradientn(
     "Fishing Hours",
     na.value = NA,
@@ -78,10 +82,14 @@ p1 <- effort_all %>%
     values = scales::rescale(c(0, 1))) +
   labs(fill  = 'Fishing hours (log scale)',
        title = 'Global fishing effort in 2020') +
-  guides(fill = guide_colourbar(barwidth = 10))
+  guides(fill = guide_colourbar(barwidth = 10)) +
+  theme(panel.background = element_rect(fill = '#061530'))
 
 
 
+png(file="~/somethings_fishy/shiny_app/www/plot.png", width=2000, height=1300)
+p1
+dev.off()
 
 
 
