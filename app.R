@@ -35,16 +35,36 @@ ui <- fluidPage(
                              img(src = "wireframe_3.png"),
                              img(src = "wireframe_4.png"),
                              img(src = "wireframe_5.png"),
-                             img(src = "plot.png")
                              
+                             h1("Plot"),
+                             h4("Here is our plot of global fishing efforts in 2020"),
+                             img(src = "plot.png")
                            )
                   ),
                   
                   # Graphs Panel
-                  tabPanel("Graphs", "asdfas;ldkjfa;lskd"),
+                  tabPanel("Graphs",
+                           mainPanel(
+                             h4("We utilized two datasets, which we combined, to create a visualization of
+                                fishing efforts worldwide. This graph shows us where fishing is most concentrated,
+                                which may be helpful to environmentalists who are interested in the problem of
+                                overfishing."),
+                           )
+                  ),
                   
                   # Reflections
-                  tabPanel("Reflections", "asdf;lkajsd;flak")
+                  tabPanel("Reflections", 
+                           mainPanel(
+                             h1("Tommy's Reflection"),
+                             h4("[insert tommy's reflection here]"),
+                             
+                             h1("Jeev's Reflection"),
+                             h4("[Insert Jeev's reflection here"),
+                             
+                             h1("Prathik's Reflection"),
+                             h4("[Insert Prathik's Reflection here"),
+                           )
+                  )
                   
                 ) # navbarPage
 ) # fluidPage
