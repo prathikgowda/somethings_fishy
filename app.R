@@ -43,6 +43,7 @@ ui <- fluidPage(
                   ),
                   
                   # Graphs Panel
+<<<<<<< Updated upstream
                   tabPanel("Graphs",
                            mainPanel(
                              h4("We utilized two datasets, which we combined, to create a visualization of
@@ -51,6 +52,11 @@ ui <- fluidPage(
                                 overfishing."),
                            )
                   ),
+=======
+                  tabPanel("Graphs", mainPanel(
+                    plotOutput("plot", width = "400px")
+                  )),
+>>>>>>> Stashed changes
                   
                   # Reflections
                   tabPanel("Reflections", 
@@ -71,9 +77,8 @@ ui <- fluidPage(
 
 # Define server function  
 server <- function(input, output, session) {
-  output$txtout <- renderText({
-    paste( input$txt1, input$txt2, sep = " " )
-  })
+  source("experiments.R")
+  output$plot <- renderPlot(p1)
 }
 
 # Create Shiny object

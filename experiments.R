@@ -72,7 +72,7 @@ p1 <- effort_all %>%
   geom_sf(data = world_shp, 
           color = '#374a6d',
           size = 0.1) +
-  geom_raster(aes(x = cell_ll_lon, y = cell_ll_lat, fill = fishing_hours)) +
+  geom_tile(aes(x = cell_ll_lon, y = cell_ll_lat, fill = fishing_hours)) +
   scale_fill_gradientn(
     "Fishing Hours",
     na.value = NA,
