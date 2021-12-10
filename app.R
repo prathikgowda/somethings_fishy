@@ -43,9 +43,11 @@ ui <-
 
     # INTRODUCTION PANEL
     tabPanel("Introduction",
-              mainPanel(
+              fluidRow(
+                column(6, img(src="fish.jpeg")),
+                column(5,
                 h1("Something's Fishy"),
-                
+                hr(),
                 h3("Project Background"),
                 h4("Who: Fish"),
                 h4("What: Are being fished at unknown rates"),
@@ -53,10 +55,11 @@ ui <-
                 h4("Where: All around the world"),
                 h4("Why: To feed the people"),
                 h4("How: By different types of fishing vessels"),
-                
+                hr(),
                 h3("Project Overview"),
-                h4("This Shiny app was inspired by the Global 
-                  Fishing Watch (https://globalfishingwatch.org) 
+                p("This Shiny app was inspired by the ",
+                   a(href = 'https://globalfishingwatch.org', 'Global Fishing Watch', .noWS = "outside"), 
+                  "
                   and some of the data that they have available 
                   to download. The Global Fishing Watch has lots 
                   of data that can be hard to interpret and 
@@ -66,85 +69,71 @@ ui <-
                   be tech-savvy, but would like to observe the 
                   data in a format that is not millions of rows 
                   in an Excel spreadsheet. ")
-              )
+              ),
+              
+              
+            )
               
     ),
                   
     # DATA PANEL
     tabPanel("Data",
-              mainPanel(
-                h1("The Data"),
-                h4("The data that was used for this Shiny app was 
-                  retrieved from the Global Fishing Watch: 
-                  Transparency for a Sustainable Ocean. We 
-                  utilized two of the datasets labeled, 
-                  'fishing-vessels-v1-5.csv' and 
-                  'mmsi-daily-csvs-10-v2-2020.zip'. The fishing 
-                  dataset has 19 variables but we will only talk 
-                  about a few of them. "),
-                h4("MMSI: this is the unique identifier for each 
-                  fishing vessel"),
-                h4("Flag: this is the country that the vessel is 
-                  from"),
-                h4("Vessel_class: is which class that the finishing
-                  vessel belongs (fishing, trawlers, squid_jigger,
-                  etc)"),
-                h4("There are many more variables but are not 
-                  necessary when looking at our data. The most 
-                  important variables here are the MMSI and flag 
-                  variables. Looking at our other dataset, 
-                  'mmsi-daily-csvs-10-v2-2020.zip’, we are able 
-                  to see the fishing done on a daily basis. The 
-                  .zip file has daily data from 2020 and uses the
-                  same MMSI identifier for each fishing vessel. 
-                  Because of this, we can match the datasets 
-                  together to make informative visualizations. 
-                  There were 6 variables in the 
-                  'mmsi-daily-csvs-10-v2-2020.zip’ dataset."),
-                h4("  1. date, which was the same all throughout 
-                  the file (since it was daily info)"),
-                h4("  2. Cell_ll_lat: which was the latitude of the
-                  fishing vessel"),
-                h4("  3. Cell_ll_lon: which was the longitude of 
-                the fishing vessel"),
-                h4("  4. Mmsi: which is the unique identifier for 
-                  each fishing vessel"),
-                h4("  5. Hours: the hours spent on the water"),
-                h4("  6. Fishing_hours: the hours spent fishing"),
-                h4("Using these variables, we are able to match up 
-                each country with the amount of fishing hours they 
-                have and where they are fishing the most. It is 
-                crucial that we match these datasets together to 
-                have the ‘flag’ of the fishing vessel.")
-              )
+      fluidRow(
+        column(9,
+          titlePanel("Dataset & variables"),
+          hr(),
+          p("The data that was used for this Shiny app was 
+            retrieved from ", 
+            a(href = 'https://globalfishingwatch.org/datasets-and-code/', 'Global Fishing Watch: Transparency for a Sustainable Ocean', .noWS = "outside"), 
+            ". We 
+            utilized two of the datasets labeled, 
+            'fishing-vessels-v1-5.csv' and 
+            'mmsi-daily-csvs-10-v2-2020.zip'. The fishing 
+            dataset has 19 variables but we will only talk 
+            about a few of them: "),
+          h4("MMSI: this is the unique identifier for each 
+            fishing vessel"),
+          h4("Flag: this is the country that the vessel is 
+            from"),
+          h4("Vessel_class: is which class that the finishing
+            vessel belongs (fishing, trawlers, squid_jigger,
+            etc)"),
+          hr(),
+          p("There are many more variables but are not 
+            necessary when looking at our data. The most 
+            important variables here are the MMSI and flag 
+            variables. Looking at our other dataset, 
+            'mmsi-daily-csvs-10-v2-2020.zip’, we are able 
+            to see the fishing done on a daily basis. The 
+            .zip file has daily data from 2020 and uses the
+            same MMSI identifier for each fishing vessel. 
+            Because of this, we can match the datasets 
+            together to make informative visualizations. 
+            There were 6 variables in the 
+            'mmsi-daily-csvs-10-v2-2020.zip’ dataset."),
+          h4("  1. date, which was the same all throughout 
+            the file (since it was daily info)"),
+          h4("  2. Cell_ll_lat: which was the latitude of the
+            fishing vessel"),
+          h4("  3. Cell_ll_lon: which was the longitude of 
+          the fishing vessel"),
+          h4("  4. Mmsi: which is the unique identifier for 
+            each fishing vessel"),
+          h4("  5. Hours: the hours spent on the water"),
+          h4("  6. Fishing_hours: the hours spent fishing"),
+          br(),
+          p("Using these variables, we are able to match up 
+          each country with the amount of fishing hours they 
+          have and where they are fishing the most. It is 
+          crucial that we match these datasets together to 
+          have the ‘flag’ of the fishing vessel.")
+      ),
+      column(3, img(src = "gfw_logo.png")))
     ),
-                  
-    # Reflections
-    tabPanel("Reflections", 
-      mainPanel(
-        h1("Tommy's Reflection"),
-        h4("[insert tommy's reflection here]"),
-        
-        h1("Jeev's Reflection"),
-        h4("[Insert Jeev's reflection here"),
-        
-        h1("Prathik's Reflection"),
-        h4("[Insert Prathik's Reflection here"),
-      )
-    ),
-    # Introduction Panel
-    tabPanel("Introduction",
-      mainPanel(
-        h1("Something's Fishy"),
-        h3("Project Background"),
-        h4("For our project, we decided to dig into global fishing data. By gathering data on where
-          fishing was concentrated, we hoped to find which countries contributed to overfishing the most.")
-      )     
-    ),
-    
+
     # Development
     tabPanel("Development",
-      h1("Development process"),
+      titlePanel("Development process"),
       hr(),
       tags$div(class="grid", 
         h3("Process map"),
@@ -200,22 +189,6 @@ ui <-
             img(src = "journey_map.png")
           )
         ),
-        hr(),
-        h3("Screen mockup"),
-        fluidRow(
-          column(6,
-            p("In the screen mockup, we are attempting to make the very base of our app.
-            We are starting to use Shiny to work on the UI of the app.
-            We have taken our wireframe and put that into Shiny.
-            However, our screen mockup did not line up directly to the wireframe.
-            This is because we have worked with Shiny to find what worked well and what was not so feasible.
-            We also just decided to make some changes to the app to make it flow better.
-            Now that we have the bones of the app, we are ready to start adding in the text and data.")
-          ),
-          column(6,
-            img(src = "mockup.png")
-          )
-        ),  
       br(),
       hr(),
       h3("Wireframes"),
@@ -236,6 +209,7 @@ ui <-
         column(2, img(src = "wireframe_4.png")),
         column(2, img(src = "wireframe_5.png")),
       ),
+      br(),
         hr(),
         h3("Screen mockup"),
         fluidRow(
@@ -258,11 +232,10 @@ ui <-
       br()
     ),
 
-    
     # Graphs Panel
     tabPanel(
       "Graphs",
-      titlePanel("Graphs & Visualizations"),
+      titlePanel("Graphs & visualizations"),
       hr(),
       tabsetPanel(
         tabPanel(
@@ -314,9 +287,8 @@ ui <-
           fluidRow(
             column(8,
               p("
-                Using Global Fishing Watch's registered vessels dataset,
-                we can examine how fishing activity differs based on the class of vessel used,
-                and how fishing vessel length is associated with amount of hours spent fishing."
+                Using 50 million rows from Global Fishing Watch's fishing effort and registered vessels datasets,
+                we can map all locations of fishing activity in the year 2020 and plot these datapoints on a world map."
               ),
             ),
             column(3,
@@ -331,8 +303,8 @@ ui <-
           h3("Active vessels cartogram"),
           p("
             Using Global Fishing Watch's registered vessels dataset,
-            we can examine how fishing activity differs based on the class of vessel used,
-            and how fishing vessel length is associated with amount of hours spent fishing."
+            we can examine the number of fishing hours by country of origin,
+            and see how this number changes each year, as plotted on the cartogram."
           ),
           hr(),
           img(src = "cartogram.gif"),
@@ -342,16 +314,19 @@ ui <-
     
     # Reflections
     tabPanel("Reflections", 
-      mainPanel(
-        h1("Tommy's Reflection"),
-        h4("[insert tommy's reflection here]"),
-        
-        h1("Jeev's Reflection"),
-        h4("[Insert Jeev's reflection here"),
-        
-        h1("Prathik's Reflection"),
-        h4("[Insert Prathik's Reflection here")
-      )
+      titlePanel("Our reflections"),
+      hr(),
+      h3("Tommy's Reflection"),
+      p("I have found that it is crucial to work well as a group when doing any type of software development. It was fun to see the visualizations come together as we worked hard to get them operational. I started to use Github which was fun and R is a language that is very powerful that can do many things. There is also a lot more to making an app than I realized."),
+      hr(),
+      h3("Jeev's Reflection"),
+      p("I learned a lot about how to develop R Shiny applications. It was also challenging to work with an extremely large dataset, especially since running simple R functions would take up gigabytes of memory on my computer. Ultimately, the decision to host data using BigQuery in the cloud made it significantly easier to create the visualizations we wanted to. It was productive to divide tasks amongst the members of our group, allowing each of us to specialize on a different part of the app."),
+      hr(),
+      h3("Prathik's Reflection"),
+      p("I learned the importance of communication in a group project. Clearly designating roles for members of our group helped us better divide tasks and coordinate our project development. I also learned about the difficulty of creating a web application - which is something I have never worked on before."),
+      hr(),
+      h3("Steven's Reflection"),
+      p("I learned a lot in making software with a group. As my first experience of making a software, I learned the difficulty of the whole process, but it is also a lot of fun to complete it with group members. I also learned how to use Github and the R language in this process."),
     )
                   
    # navbarPage
