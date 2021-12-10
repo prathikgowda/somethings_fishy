@@ -11,9 +11,9 @@ library(rgeos)
 test <- "hello"
 
 # Specify location of data directory
-# effort_data_dir <- '~/somethings_fishy/dataset/mmsi-daily-csvs-10-v2-2020'
-effort_data_dir <- '~/somethings_fishy/dataset/test-effort-data'
-vessel_data_file <- '~/somethings_fishy/dataset/vessel/fishing-vessels-v1-5.csv'
+effort_data_dir <- '~/somethings_fishy/dataset/mmsi-daily-csvs-10-v2-2020'
+# effort_data_dir <- 'dataset/test-effort-data'
+vessel_data_file <- 'dataset/vessel/fishing-vessels-v1-5.csv'
 
 # Create dataframe of filenames dates and filter to date range of interest
 effort_files <- tibble(
@@ -50,7 +50,6 @@ world_shp <- sf::st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
 
 # Aggregate data across all fleets and geartypes
 effort_all <- combined_df %>% 
-  filter(flag %in% c('CHN')) %>% 
   group_by(cell_ll_lat,cell_ll_lon, flag) %>% 
   summarize(fishing_hours = sum(fishing_hours, na.rm = T))
 # ,
@@ -63,14 +62,14 @@ effort_all <- combined_df %>%
 
 
 # Linear green color palette function
-effort_pal <- colorRampPalette(c('#0C276C', '#3B9088', '#EEFF00', '#ffffff'), 
+effort_pal <- colorRampPalette(c('#0f1c63', '#1343f0', '#f01313', "#ffaa00"), 
                                interpolate = 'linear')
 
 # Map fishing effort
 p1 <- effort_all %>%
   ggplot() +
   geom_sf(data = world_shp, 
-          color = '#374a6d',
+          color = '#6b6b6b',
           size = 0.1) +
   geom_tile(aes(x = cell_ll_lon, y = cell_ll_lat, fill = fishing_hours)) +
   scale_fill_gradientn(
@@ -83,11 +82,11 @@ p1 <- effort_all %>%
   labs(fill  = 'Fishing hours (log scale)',
        title = 'Global fishing effort in 2020') +
   guides(fill = guide_colourbar(barwidth = 10)) +
-  theme(panel.background = element_rect(fill = '#061530'))
+  theme(panel.background = element_rect(fill = '#ffffff'))
 
 
 
-png(file="~/somethings_fishy/shiny_app/www/plot.png", width=2000, height=1300)
+png(file="~/somethings_fishy/shiny_app/www/plot-new.png", width=2000, height=1300)
 p1
 dev.off()
 

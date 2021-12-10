@@ -1,11 +1,47 @@
 # Load R packages
 library(shiny)
+library(shinythemes)
+library(shinydashboard)
+library(DBI)
+library(bigrquery)
+
+if (FALSE) {
+  bq_auth(path = "auth/somethings-fishy-4b55f5c190c0.json")
+}
+
+# Store the project id
+projectid <- "somethings-fishy"
+
+# Set your query
+sql <- "
+  SELECT DISTINCT
+      mmsi,
+      flag_gfw AS flag,
+      vessel_class_gfw AS vessel_class,
+      length_m_gfw AS vessel_length_meters,
+      fishing_hours_2020 AS fishing_hours
+  FROM
+      `global-fishing-watch.gfw_public_data.fishing_vessels_v2` AS vessels
+  ORDER BY fishing_hours_2020 DESC
+  LIMIT 10000
+"
+
+tb <- bq_project_query(projectid, sql)
+
+# Run the query and store the data in a tibble
+df <- as.data.frame(bq_table_download(tb))
+
 
 # Define UI
-ui <- fluidPage(
-                navbarPage(
-                  "Group 2: CSC-324",
+ui <-
+  
+  navbarPage(
+    # theme = shinytheme("sandstone"),
+    tags$head(  
+      tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+    ),
 
+<<<<<<< Updated upstream
                   # INTRODUCTION PANEL
                   tabPanel("Introduction",
                            mainPanel(
@@ -179,12 +215,164 @@ ui <- fluidPage(
                   )
                   
                 ) # navbarPage
+=======
+    # Introduction Panel
+    tabPanel("Introduction",
+      mainPanel(
+        h1("Something's Fishy"),
+        h3("Project Background"),
+        h4("For our project, we decided to dig into global fishing data. By gathering data on where
+          fishing was concentrated, we hoped to find which countries contributed to overfishing the most.")
+      )     
+    ),
+    
+    # Development
+    tabPanel("Development",
+      h1("Journey Map"),
+      hr(),
+      tags$div(class="grid", 
+        fluidRow(
+          column(6, 
+            h4("Here is our Journey Map detailing the story of Environemnental Erin!"),
+            img(src = "journeymap.png"),
+          ),
+          column(6, 
+            h4("Here is our process map detailing our developement process!"),
+            img(src = "process_map.png"),
+          )
+        )
+      ),
+      h3("Wireframes"),
+      h4("Here are our wireframes which we used during development"),
+      hr(),
+      tags$div(class="grid", 
+        fluidRow(
+          column(3, img(src = "wireframe_1.png")),
+          column(3, img(src = "wireframe_2.png")),
+          column(3, img(src = "wireframe_3.png")),
+          column(3, img(src = "wireframe_4.png")),
+          column(3, img(src = "wireframe_5.png")),
+          column(3),
+        ),
+      )
+    ),
+    
+    # Graphs Panel
+    tabPanel(
+      "Graphs",
+      titlePanel("Graphs & Visualizations"),
+      hr(),
+      tabsetPanel(
+        tabPanel(
+          "Fishing activity by vessel",
+          h3("Fishing activity by vessel"),
+          p("
+            Using Global Fishing Watch's registered vessels dataset,
+            we can examine how fishing activity differs based on the class of vessel used,
+            and how fishing vessel length is associated with amount of hours spent fishing."
+          ),
+          hr(),
+          sidebarLayout(
+            sidebarPanel(    
+              helpText(
+                "Filter by vessel class type:"
+              ),
+              selectInput("class", "Vessel Class:",
+                c(
+                  "Trawlers" = "trawlers",
+                  "Fishing" = "fishing",
+                  "Set Longline"  = "set_longlines",
+                  "Set Gillnet"  = "set_gillnets",
+                  "Fixed Gea"  = "fixed_gear",
+                  "Other Purse Seines" = "other_purse_seines",
+                  "Drifting Longlines" = "drifting_longlines",
+                  "Pole and Line" = "pole_and_line",
+                  "Dredge Fishing" = "dredge_fishing",
+                  "Pots and Traps" = "pots_and_traps",
+                  "Squid Jigger" = "squid_jigger",
+                  "Tuna Purse Seines" = "tuna_purse_seines"
+                )
+              ),
+              helpText(
+                "Click on a point to view additional information for that vessel below."
+              ),
+              hr(),
+              div(style = "height:200px; overflow-y: scroll; overflow-x: scroll;",
+              tableOutput("data")
+              )
+            ),
+            mainPanel(
+              plotOutput("plot", click = "plot_click"),
+            )
+          )
+        ),
+        tabPanel(
+          "Global fishing activity map",
+          h3("Global fishing activity map"),
+          fluidRow(
+            column(8,
+              p("
+                Using Global Fishing Watch's registered vessels dataset,
+                we can examine how fishing activity differs based on the class of vessel used,
+                and how fishing vessel length is associated with amount of hours spent fishing."
+              ),
+            ),
+            column(3,
+              img(src = "legend.png", style="max-width: 300px; padding: 0 20px;")
+            )
+          ),
+          hr(),
+          img(src = "global_fishing_plot.png")
+        ),
+        tabPanel(
+          "Active vessels cartogram",
+          h3("Active vessels cartogram"),
+          p("
+            Using Global Fishing Watch's registered vessels dataset,
+            we can examine how fishing activity differs based on the class of vessel used,
+            and how fishing vessel length is associated with amount of hours spent fishing."
+          ),
+          hr(),
+          img(src = "cartogram.gif"),
+        )
+      ),
+    ),
+    
+    # Reflections
+    tabPanel("Reflections", 
+      mainPanel(
+        h1("Tommy's Reflection"),
+        h4("[insert tommy's reflection here]"),
+        
+        h1("Jeev's Reflection"),
+        h4("[Insert Jeev's reflection here"),
+        
+        h1("Prathik's Reflection"),
+        h4("[Insert Prathik's Reflection here")
+      )
+    )
+                  
+   # navbarPage
+>>>>>>> Stashed changes
 ) # fluidPage
 
 # Define server function  
 server <- function(input, output, session) {
-  source("experiments.R")
-  output$plot <- renderPlot(p1)
+
+  output$plot <- renderPlot({
+    filtered_data <- subset(df, df$vessel_class == input$class)
+    plot(
+      filtered_data$vessel_length_meters, 
+      filtered_data$fishing_hours,
+      ylab="Time spent fishing (hrs)",
+      xlab="Vessel length (m)")
+  }, res = 96)
+
+  output$data <- renderTable({
+    filtered_data <- subset(df, df$vessel_class == input$class)
+    nearPoints(filtered_data, input$plot_click, xvar = "vessel_length_meters", yvar = "fishing_hours")
+  })
+
 }
 
 # Create Shiny object
