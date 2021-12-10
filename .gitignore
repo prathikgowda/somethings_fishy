@@ -40,3 +40,5 @@ vignettes/*.pdf
 
 dataset/
 .DS_Store
+
+auth/
