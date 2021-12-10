@@ -41,7 +41,6 @@ ui <-
       tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
     ),
 
-<<<<<<< Updated upstream
                   # INTRODUCTION PANEL
                   tabPanel("Introduction",
                            mainPanel(
@@ -215,7 +214,6 @@ ui <-
                   )
                   
                 ) # navbarPage
-=======
     # Introduction Panel
     tabPanel("Introduction",
       mainPanel(
@@ -281,9 +279,9 @@ ui <-
                 c(
                   "Trawlers" = "trawlers",
                   "Fishing" = "fishing",
-                  "Set Longline"  = "set_longlines",
-                  "Set Gillnet"  = "set_gillnets",
-                  "Fixed Gea"  = "fixed_gear",
+                  "Set Longline" = "set_longlines",
+                  "Set Gillnet" = "set_gillnets",
+                  "Fixed Gea" = "fixed_gear",
                   "Other Purse Seines" = "other_purse_seines",
                   "Drifting Longlines" = "drifting_longlines",
                   "Pole and Line" = "pole_and_line",
@@ -353,7 +351,6 @@ ui <-
     )
                   
    # navbarPage
->>>>>>> Stashed changes
 ) # fluidPage
 
 # Define server function  
