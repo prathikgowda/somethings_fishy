@@ -1,0 +1,13 @@
+name: somethings_fishy
+title: somethings_fishy
+username:
+account: jeev
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5261698
+bundleId: 5353564
+url: https://jeev.shinyapps.io/somethings_fishy/
+when: 1639108356.95621
+lastSyncTime: 1639108356.95622
+asMultiple: FALSE
+asStatic: FALSE

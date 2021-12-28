@@ -4,10 +4,10 @@ library(shinythemes)
 library(shinydashboard)
 library(DBI)
 library(bigrquery)
+library(rsconnect)
+library(readr)
 
-if (FALSE) {
-  bq_auth(path = "auth/somethings-fishy-4b55f5c190c0.json")
-}
+bq_auth(path = "somethings-fishy-4b55f5c190c0.json")
 
 # Store the project id
 projectid <- "somethings-fishy"
@@ -313,21 +313,48 @@ ui <-
     ),
     
     # Reflections
-    tabPanel("Reflections", 
-      titlePanel("Our reflections"),
+    tabPanel("Reflections & References", 
+      titlePanel("Reflections & References"),
+      h3("Our reflections"),
       hr(),
-      h3("Tommy's Reflection"),
+      p(tags$strong("Tommy:")),
       p("I have found that it is crucial to work well as a group when doing any type of software development. It was fun to see the visualizations come together as we worked hard to get them operational. I started to use Github which was fun and R is a language that is very powerful that can do many things. There is also a lot more to making an app than I realized."),
-      hr(),
-      h3("Jeev's Reflection"),
+      p(tags$strong("Jeev:")),
       p("I learned a lot about how to develop R Shiny applications. It was also challenging to work with an extremely large dataset, especially since running simple R functions would take up gigabytes of memory on my computer. Ultimately, the decision to host data using BigQuery in the cloud made it significantly easier to create the visualizations we wanted to. It was productive to divide tasks amongst the members of our group, allowing each of us to specialize on a different part of the app."),
-      hr(),
-      h3("Prathik's Reflection"),
+      p(tags$strong("Prathik:")),
       p("I learned the importance of communication in a group project. Clearly designating roles for members of our group helped us better divide tasks and coordinate our project development. I also learned about the difficulty of creating a web application - which is something I have never worked on before."),
-      hr(),
-      h3("Steven's Reflection"),
+      p(tags$strong("Steven:")),
       p("I learned a lot in making software with a group. As my first experience of making a software, I learned the difficulty of the whole process, but it is also a lot of fun to complete it with group members. I also learned how to use Github and the R language in this process."),
-    )
+      hr(),
+      h3("Future opportunities"),
+      p("There are many future research opportunities that can come from this project with the addition of more data. One of the ideas that we had was to compare what fish vessels were fishing and compare it to the consumption of that fish in the country that the vessel belongs to. However, we came up with that idea a bit too late and we were not able to find any data and it, so it was not feasible with the time constraints we had."),
+      hr(),
+      h3("References"),
+      p("
+      We would like to thank Global Finishing Watch.
+      They are the owners of the data that we used and provided some code in R that got us started to
+      analyze the data in an efficient way. We would also like to thank our professor,
+      Fernanda Eliott, for helping us with ideas as well as implementation in Shiny.
+      Finally, we wish to thank our alumni mentor, Wesley, for his feedback during the development process."),
+      hr(),
+      h3("Packages used"),
+      p("Below are a list of the packages we used in our Shiny app."),
+      tags$ul(
+        tags$li(tags$pre("tidyverse")),
+        tags$li(tags$pre("shiny")), 
+        tags$li(tags$pre("shinythemes")),
+        tags$li(tags$pre("shinydashboard")),
+        tags$li(tags$pre("DBI")),
+        tags$li(tags$pre("bigrquery")),
+        tags$li(tags$pre("lubridate")),
+        tags$li(tags$pre("furrr")),
+        tags$li(tags$pre("sf")),
+        tags$li(tags$pre("raster")),
+        tags$li(tags$pre("maps")),
+        tags$li(tags$pre("cartogram")),
+        tags$li(tags$pre("rsconnect")),
+      )
+)
                   
    # navbarPage
 ) # fluidPage
